@@ -80,13 +80,86 @@
 		</div>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			In order to modify the rasterization pipeline for supersampling, we split pixels into subparts based on the sample rate by iterating through the x and y positions of each pixel by sqrt(sample_rate) and calculated the color of each subpixel. We increased the size of the sample_buffer vector size by multiplying the original width and height by the <code>sample_rate</code>, stored each subpixel's color into <code>sample_buffer</code>, and then averaged the colors to retrieve the final pixel color. To avoid overwriting colors in the <code>sample_buffer</code>, we used a <code>counter</code> variable in addition to our indexing calculation to distinguish storage between subpixels. 
+		</p>
+		<p>
+			Supersampling is useful for alleviating aliasing (jaggies), allowing for smoother edges and greater color representation. Prior to supersampling, thinner edges in our triangles resulted in breaks in color, dividing the triangle into distinct sections. However, after enabling antialiasing, the edges of the triangle were smoother and more cohesive.
+		</p>
+		<p>
+			The images below show sample rates 1, 4, and 16 respectively for our triangle: 
+		</p>
+		
+		<table style="width: 100%; text-align: left; border-collapse: collapse;">
+			<tr>
+			  <td style="text-align: center;">
+				<img src="triangle_sample_size_1.png" width="300px"/>
+				<figcaption>Supersample Rate 1 Per Pixel</figcaption>
+			  </td>
+			  <td style="text-align: center;">
+				<img src="triangle_sample_size_4.png" width="300px"/>
+				<figcaption>Supersample Rate 4 Per Pixel</figcaption>
+			  </td>
+			  <td style="text-align: center;">
+				<img src="triangle_sample_size_16.png" width="300px"/>
+				<figcaption>Supersample Rate 16 Per Pixel</figcaption>
+			  </td>
+			</tr>
+		</table>
+		<br>
+		At a sample rate of 1, there is a visible distinction between the triangle and background (three pixels detached from rest of the triangle). This changes with a sample rate of 4, where the two red pixels are bridged by less saturated pixels. At a sample rate of 16, pixels farther away from the body of the triangle are lighter and less saturated, creating a smoother transition between the triangle and background. 
+		The lighter, more unanimous coloring is due to averaging the color of more subpixels parts.
+
 
 		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			We began by implementing the three tranformations, translation, scaling, and rotation, in a 3x3 matrix operating on homogeneous coordinates. 
+		</p>
+		<p>
+			Afterwards, we applied these transformations onto our cubeman to move him to a cheering and stomping position. 
+		</p>
+
+		<figure>
+			<img src="custom_bot.png" alt="Custom Bot" style="width:80%"/>
+			<figcaption>Cheering and Stomping Cubeman</figcaption>
+		</figure>
+
+		<p>Keeping the hierarchical organization of cubeman's limbs in mind, for the left leg and arms, we rotated the forearm/leg blocks before translating them to their final position. Afterwards, we rotated the lower left leg into a bent position.</p>
 
 		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			Barycentric coordinates are represent the linear combination of vertices and can be used to interpolate pixel values within a triangle. To find the weighted sum of vertex colors, we calculated the alpha, beta, and gamma values for each subpixel of the triangle and multiplied these with the provided vertex colors. 
+		</p>
+		<b>Barycentric Coordinates Formula</b>
+		<p style="text-align: center;">
+			\[
+			\begin{align*}
+			\alpha &= \frac{-(x - x_B)(y_C - y_B) + (y - y_B)(x_C - x_B)}{-(x_A - x_B)(y_C - y_B) + (y_A - y_B)(x_C - x_B)} \\
+			\beta &= \frac{-(x - x_C)(y_A - y_C) + (y - y_C)(x_A - x_C)}{-(x_B - x_C)(y_A - y_C) + (y_B - y_C)(x_A - x_C)} \\
+			\gamma &= 1 - \alpha - \beta
+			\end{align*}
+			\]
+		<p>
+			Before adding values into our <code>sample_buffer</code>, we ensured that (x,y) was within the bounds of the triangle by checking if the alpha, beta, and gamma values were greater than or equal to 0. Stored subpixels in <code>sample_buffer</code> are later averaged in <code>resolve_to_framebuffer</code> to produce the final pixel color.
+		</p>
+		<p>
+			In the examples below, we used barycentric coordinates for interpolating colors across the triangle and the color wheel, achieving a gradient effect. 
+		</p>
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td>
+					<img src="custom_bot.png" alt="Custom Bot" style="width:100%"/>
+					<figcaption>Triangle Sample</figcaption>
+				</td>
+				<td>
+					<img src="color_wheel.png" alt="Barycentric Coordinates Color Wheel" style="width:100%"/>
+					<figcaption>Color Wheel with Sample Rate of 1</figcaption>
+				</td>
+			</tr>
+		</table>
+
+
+
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
