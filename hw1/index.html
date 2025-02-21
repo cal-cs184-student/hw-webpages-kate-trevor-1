@@ -147,14 +147,15 @@
 		<p>
 			Nearest pixel sampling returns the color of the closest point to the UV coordinates inputting. The UV x and y values were bounded in a to 0.99 range to prevent out of triangle edge cases and rescaled by a multiplicative factor of <code>width - 1</code> and <code>height - 1</code>. Final values were then used to return the corresponding Color from the mipmap.
 		<p>
-			Similar to nearest pixel sampling, we bounded the inputted values and rescaled them by the width and height for bilinear pixel sampling. To calculate the four closest points to our input, we retrieved the corresponding colors for both the floor and ceiling value <code>uv.x</code> and <code>uv.y</code> coordinates. The floored and ceiling values were then used to get the final colors of u00, u10, u01, and u11, where 0 represents a floored x/y value and 1 represents a ceiled x/y value. We also got the values for s and t by calculating the distances between the clamped x - floored x and clamped y - floored y respectively. All of these variables were used in lerping to attain u0 and u1, which were used in another linear interpolation to get the final color.
+			In bilinear pixel sampling, the nearest four points form a distance weighted average to construct the designated point. Similar to nearest pixel sampling, we begin by boundeding the inputted values and rescaled them by the width and height. To calculate the four closest points to our input and interpolate them, we retrieved the corresponding colors for both the floor and ceiling value <code>uv.x</code> and <code>uv.y</code> coordinates. The floored and ceiling values were then used to get the final colors of u00, u10, u01, and u11, where 0 represents a floored x/y value and 1 represents a ceiled x/y value. We also got the values for s and t by calculating the distances between the clamped x - floored x and clamped y - floored y respectively.
 		</p>
 		<p>
-			Formula for lerp:
-			\[
 			\begin{align*}
-			lerp(a, b, t) &= (1 - t) \cdot a + t \cdot b
+			lerp(x, v_0, v_1) = v_0 + x(v_1  v_0)
 			\end{align*}
+		</p>
+		<p>
+			All of these variables were used in helper linear interpolation calculations to attain u0 and u1, which were used in final linear interpolation to get the returned color. This allows for the smoother effect in bilinear sampling.
 		</p>
 
 		<div style="display: flex;on: column; align-items: center;">
@@ -181,6 +182,12 @@
 			  </tr>
 			</table>
 		</div>
+		<p>
+			Observing the images above, "Nearest Sampling at 1 Sample Per Pixel" provides a more pixelated appearance when compared to "Bilinear Sampling at 1 Sample Per Pixel," which has a noticably smoother double line to represent the campanile."Nearest Sampling at 16 Sample Per Pixel" looks similar to "Bilinear Sampling at 1 Sample Per Pixel," likely due to the increased number of samples averaged per pixel. "Bilinear Sampling at 16 Sample Per Pixel", howest, has a blurriest appearance compared to the other images.
+		</p>
+		<p>
+			There would be a large difference between the two sampling methods when working with less pixels since nearest pixel sampling produces a more jagged lines as opposed to bilinear's blurrier ones.  
+		</p>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		<p>When we sample at level 0, the image is at its highest resolution. Essentially, there is an inverse relationship between the level number and the resolution of the image. The reason this kind of sampling is important is that it accounts for almost the "concentration" of the texture in a certain area when sampling. When the texture map is more concentrated in a certain area of a rendering, there is likely to be more alilasing (more texture often means higher contrast / frequency). Evaluating each part of an image differently and then using the appropriate mipmap allows us to dynamically choose the resolution depending on the area of the image being rendered.</p>
