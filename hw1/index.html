@@ -44,11 +44,18 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		<p></p>
+		We learned how to render images with minimal aliasing using three main sampling methods! Supersampling, pixel sampling, and level sampling. Supersampling allowed us to essentially the values for each pixel, and worked pretty well, although it is pretty tedious to do (efficiency and memory wise) for bigger projects. Pixel sampling, allowed us to focus on one pixel at a time and decide its value in different ways (nearest vs. bilinear), and level sampling allowed us to use mipmaps to dynamically render an image.
+
+		We definitely found level sampling pretty interesting, since its a pretty dynamic method of sampling. Supersampling and pixel sampling sort of sample each location of the image in the same way, but the different mipmaps used in level sampling allow us to vary the resolution which is pretty cool.
+		</p>div>
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		One important aspect of this task was ensuring that the vertices of the triangle we were working with were in counter-clockwise order, since the formulas we used worked based on that assumption. We checked for this by taking the cross product of two of the vectors (by taking two different pairs of vertices) that make up the triangle, and then swapping vertices if we needed to. The rest of the task was fairly straightforward, as we implemented the \( \text{inside}(s_x, s_y) \) formula from Lecture 2 to rasterize the triangles.
-
+		<p></p>One important aspect of this task was ensuring that the vertices of the triangle we were working with were in counter-clockwise order, since the formulas we used worked based on that assumption. We checked for this by taking the cross product of two of the vectors (by taking two different pairs of vertices) that make up the triangle, and then swapping vertices if we needed to. The rest of the task was fairly straightforward, as we implemented the \( \text{inside}(s_x, s_y) \) formula from Lecture 2 to rasterize the triangles. By taking the greatest lower bound possible x and y coordinates and the least upper bound of possible x and y coordinates for the triangle (with some nested min max functions), our for loops only iterated through the pixels that cover the bounding box of the triangle.</p>
+		<figure>
+			<img src="task1.png" alt="Task 1" style="width:80%"/>
+			<figcaption>Test 4</figcaption>
+		</figure>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 		<p>
@@ -133,10 +140,19 @@
 
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		<p>Pixel sampling is the use of pixels to represent a color from a source such as an image/texture. For texture mapping, we integrated pixel sampling by applying the barycentric coordinates formula onto both the u and v parameters provided. Afterwards, we inputted our new UV point into the SampleParam and stored textures retrieved into <code>sample_buffer</code>. We added the </p>
-		<p>There were two different types of sampling users could alternate between: nearest pixel sampling and bilinear pixel sampling. During nearest pixel sampling, </p>
+		<p>
+			Pixel sampling is the use of pixels to represent a color from a source such as an image/texture. For texture mapping, we integrated pixel sampling by applying the barycentric coordinates formula onto both the u and v parameters provided. Afterwards, we inputted our new UV point into the SampleParam and stored textures retrieved into <code>sample_buffer</code>.</p>
+		<p>
+			Our implementation supported two types of sampling through a togglable keystorke, "P": nearest pixel sampling and bilinear pixel sampling. 
+		</p>
+		<p>
+			Nearest pixel sampling returns the color of the closest point to the UV coordinates inputting. The UV x and y values were bounded in a to 0.99 range to prevent out of triangle edge cases and rescaled by a multiplicative factor of <code>width - 1</code> and <code>height - 1</code>. Final values were then used to return the corresponding Color from the mipmap.
+		<p>
+			Similar to nearest pixel sampling, we bounded the inputted values and rescaled them by the width and height for bilinear pixel sampling. To calculate the four closest points to our input, we retrieved the corresponding colors for both the floor and ceiling value <code>uv.x</code> and <code>uv.y</code> coordinates. The floored and ceiling values were then used to get the final colors of u00, u10, u01, and u11, where 0 represents a floored x/y value and 1 represents a ceiled x/y value. We also got the values for s and t by calculating the distances between the clamped x - floored x and clamped y - floored y respectively. All of these variables were used in lerping to attain u0 and u1, which were used in another linear interpolation to get the final color.
+		</p>
+		<p></p>
 
-		<div style="display: flex; flex-direction: column; align-items: center;">
+		<div style="display: flex;on: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
@@ -162,7 +178,11 @@
 		</div>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		<p>There are different levels at which we can sample an image. Level 0 re </p>
+		<p>When we sample at level 0, the image is at its highest resolution. Essentially, there is an inverse relationship between the level number and the resolution of the image. The reason this kind of sampling is important is that it accounts for almost the "concentration" of the texture in a certain area when sampling. When the texture map is more concentrated in a certain area of a rendering, there is likely to be more alilasing (more texture often means higher contrast / frequency). Evaluating each part of an image differently and then using the appropriate mipmap allows us to dynamically choose the resolution depending on the area of the image being rendered.</p>
+		<p>For level 0, nothing really changed from what we did from the tasks, so for our sample method, we just passed in the pixel sampling method and level = 0. For nearest pixel sampling, we just made sure to round our calculated level values (from get_level) and for calling our sample method, our parameters were just the given pixel sampling method and rounded level we came up with.</p>
+		<p>Bilinear level sampling was slightly more complex. We recorded the texture values returned by sample_nearest(uv, floor(level)) and sample_nearest(uv, ceil(level)) (we used sample_nearest or sample_bilinear depending on the pixel sampling method, just wrote sample_nearest for example's sake). To finish the bilinear interpolation, we then interpolated the two values and used level - floor(level) as the x value so the final texture we got was essentially a weighted average of the nearest 4 pixels.</p>
+		<p>The math behind this was pretty straight forward. For implementing our get_level method, we simply calculated the appropriate differences between coordinates in the vectors given by sp and scaled them to the width and height of the texture. Then we took the maximum of the norms between the x and y direction and found the log2() of that maximum value for our calculated level; a pretty straightforward application of the formulas given to us in lecture and discussion. The modifications we made to the rasterize_textured_triangle function was limited to calculated the barycentric coordinates for (x+1, y) and (x, y+1) for the SampleParams struct as indicated by the spec.</p>
+		<p>I think level sampling is really great because of the dynamic resolution options it essentially offers by choosing the resoluton based on the texture on acertain aea  age. owever, it does require more storage as we need to store information for the different mipmap levels and that isn't as cost effective in terms of memory usage. It is really excellent for anti aliasing however. For super sampling, there is an issue of memory and speed since the amount of math being done to calculate the image can grow exponentially, but since it is essentially like a blur filter, it does great for antialiasing. Pixel sampling seems to kind of an ideal version of sampling to me when considering efficiency and memory drawbacks. Nearest sampling isn't so ideal for anti aliasing, but bilinear interpolation almost acts like supersamplings cost efficient cousin and has decent anti aliasing power.</p></p>p></p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
