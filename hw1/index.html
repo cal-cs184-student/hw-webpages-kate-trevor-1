@@ -48,7 +48,7 @@
 		We learned how to render images with minimal aliasing using three main sampling methods! Supersampling, pixel sampling, and level sampling. Supersampling allowed us to essentially the values for each pixel, and worked pretty well, although it is pretty tedious to do (efficiency and memory wise) for bigger projects. Pixel sampling, allowed us to focus on one pixel at a time and decide its value in different ways (nearest vs. bilinear), and level sampling allowed us to use mipmaps to dynamically render an image.
 
 		We definitely found level sampling pretty interesting, since its a pretty dynamic method of sampling. Supersampling and pixel sampling sort of sample each location of the image in the same way, but the different mipmaps used in level sampling allow us to vary the resolution which is pretty cool.
-		</p>div>
+		</p>
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 		<p></p>One important aspect of this task was ensuring that the vertices of the triangle we were working with were in counter-clockwise order, since the formulas we used worked based on that assumption. We checked for this by taking the cross product of two of the vectors (by taking two different pairs of vertices) that make up the triangle, and then swapping vertices if we needed to. The rest of the task was fairly straightforward, as we implemented the \( \text{inside}(s_x, s_y) \) formula from Lecture 2 to rasterize the triangles. By taking the greatest lower bound possible x and y coordinates and the least upper bound of possible x and y coordinates for the triangle (with some nested min max functions), our for loops only iterated through the pixels that cover the bounding box of the triangle.</p>
@@ -87,7 +87,6 @@
 		<br>
 		At a sample rate of 1, there is a visible distinction between the triangle and background (three pixels detached from rest of the triangle). This changes with a sample rate of 4, where the two red pixels are bridged by less saturated pixels. At a sample rate of 16, pixels farther away from the body of the triangle are lighter and less saturated, creating a smoother transition between the triangle and background. 
 		The lighter, more unanimous coloring is due to averaging the color of more subpixels parts.
-
 
 		<h2>Task 3: Transforms</h2>
 		<p>
@@ -150,7 +149,13 @@
 		<p>
 			Similar to nearest pixel sampling, we bounded the inputted values and rescaled them by the width and height for bilinear pixel sampling. To calculate the four closest points to our input, we retrieved the corresponding colors for both the floor and ceiling value <code>uv.x</code> and <code>uv.y</code> coordinates. The floored and ceiling values were then used to get the final colors of u00, u10, u01, and u11, where 0 represents a floored x/y value and 1 represents a ceiled x/y value. We also got the values for s and t by calculating the distances between the clamped x - floored x and clamped y - floored y respectively. All of these variables were used in lerping to attain u0 and u1, which were used in another linear interpolation to get the final color.
 		</p>
-		<p></p>
+		<p>
+			Formula for lerp:
+			\[
+			\begin{align*}
+			lerp(a, b, t) &= (1 - t) \cdot a + t \cdot b
+			\end{align*}
+		</p>
 
 		<div style="display: flex;on: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
