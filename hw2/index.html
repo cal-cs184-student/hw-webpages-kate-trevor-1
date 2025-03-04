@@ -107,12 +107,34 @@
 		</figure>
 
 		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		<p> 
+			De Casteljau algorithm extends to Bezier surfaces through the subdivision of control points in first the u, then v direction. This is done by creating a separate <code>evaluateStep</code> method to calculate intermediate points given as Vector3Ds parameters. We then called on <code>evluateStep</code> multiple times, using u as our t parameter to form a row of points. Points retrieved here are then used as control points and v is used as the t parameter to return the final point.
+		</p>
+		<figure>
+			<img src="bez_teapot_new.png" alt="Alternative Bezier Curve" style="width:75%"/>
+			<figcaption>Teapot with Bezier Surfacing</figcaption>
+		</figure>
 		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			To implement area-weighted vertex normals, we began by finding the three vertices of each face from the provided Half-Edge and calculated a third, perpendicular vector by taking the cross product of the two vectors. We repeated this process for each face and called on the <code>unit</code> method to produce the final area-weighted normal of a given vertex.
+		</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="flat_shading_teapot.png" width="400px"/>
+				  <figcaption>Teapot With Flat Shading</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="smooth_shading_teapot.png" width="400px"/>
+				  <figcaption>Teapot With Phong Shading</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h3>Part 4: Edge flip</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
