@@ -136,106 +136,94 @@
 		</div>
 
 		<h3>Part 4: Edge flip</h3>
-		Since we don't want to flip boundary edges, the first part of our code is a check that just returns the inputted edge if it is a boundary.
-		To figure out how to reassign pointers for this part, based on the definitions for the data structures given in lecture, we mapped out how the mesh would look before and after flipping one edge.
-		<figure>
-			<img src="edgeflip.png" alt="Half-Edge Diagram for an Edge Flip" style="width:100%"/>
-			<figcaption>Half-Edge Diagram before and after an Edge Flip</figcaption>
-		</figure>
+        Since we don't want to flip boundary edges, the first part of our code is a check that just returns the inputted edge if it is a boundary.
+        To figure out how to reassign pointers for this part, based on the definitions for the data structures given in lecture, we mapped out how the mesh would look before and after flipping one edge.
+        <figure>
+            <img src="edgeflip.png" alt="Half-Edge Diagram for an Edge Flip" style="width:100%"/>
+            <figcaption>Half-Edge Diagram before and after an Edge Flip</figcaption>
+        </figure>
 
-		When we perform an edge flip, this is how the pointers can change. When we initially implemented this method we had a couple bugs so we made this table to minimize the number of pointers we actually worked with. A blue highlighted cell indicates the original pointer changed after the flip and a grey cell indicates that the respective pointer is irrelevant to the problem and does not change.
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="halfedges-flip.png" width="400px"/>
-				  <figcaption>Pointers for Half-Edges</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="edges-flip.png" width="400px"/>
-				  <figcaption>Pointers for Edges</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="vertices-flip.png" width="400px"/>
-				  <figcaption>Pointers for Vertices</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="faces-flip.png" width="400px"/>
-				  <figcaption>Pointers for Faces</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+        When we perform an edge flip, this is how the pointers can change. When we initially implemented this method we had a couple bugs so we made this table to minimize the number of pointers we actually worked with. A blue highlighted cell indicates the original pointer changed after the flip and a grey cell indicates that the respective pointer is irrelevant to the problem and does not change.
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center;">
+                  <img src="halfedges-flip.png" width="400px"/>
+                  <figcaption>Pointers for Half-Edges</figcaption>
+                </td>
+                <td style="text-align: center;">
+                  <img src="edges-flip.png" width="400px"/>
+                  <figcaption>Pointers for Edges</figcaption>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: center;">
+                  <img src="vertices-flip.png" width="400px"/>
+                  <figcaption>Pointers for Vertices</figcaption>
+                </td>
+                <td style="text-align: center;">
+                  <img src="faces-flip.png" width="400px"/>
+                  <figcaption>Pointers for Faces</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
 
-		Clearly, only the half-edges 0-5 are different (at least the way we assigned them), so those are the only ones we should define and change. Since <code>h1</code> and <code>h4</code> only had its <code>next</code> value changed, we set its neighbors first. Then we set <code>h2</code> and <code>h5</code> since we could use the references to <code>f0</code> and <code>f1</code> using <code>h1</code> and <code>h4</code>, and we finished by setting <code>h0</code> and <code>h3</code> last.
-		We aren't entirely sure why we needed to define the face pointers to finish this task, but we found that if we didn't, sometimes flipping the edges would cause the face to disappear (summarizes our debugging journey).
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="newteapot4.png" width="400px"/>
-				  <figcaption>Teapot Before Edge Flips</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="flipteapot4.png" width="400px"/>
-				  <figcaption>Teapot After Edge Flips</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+        Clearly, only the half-edges 0-5 are different (at least the way we assigned them), so those are the only ones we should define and change. Since <code>h1</code> and <code>h4</code> only had its <code>next</code> value changed, we set its neighbors first. Then we set <code>h2</code> and <code>h5</code> since we could use the references to <code>f0</code> and <code>f1</code> using <code>h1</code> and <code>h4</code>, and we finished by setting <code>h0</code> and <code>h3</code> last.
+        We aren't entirely sure why we needed to define the face pointers to finish this task, but we found that if we didn't, sometimes flipping the edges would cause the face to disappear (summarizes our debugging journey).
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center;">
+                  <img src="newteapot4.png" width="400px"/>
+                  <figcaption>Teapot Before Edge Flips</figcaption>
+                </td>
+                <td style="text-align: center;">
+                  <img src="flipteapot4.png" width="400px"/>
+                  <figcaption>Teapot After Edge Flips</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
 
-		<h3>Part 5: Edge split</h3>
-		Since we don't want to split boundary edges, the first part of our code is a check that just returns the inputted edge if it is a boundary.
-		To figure out how to reassign pointers for this part, based on the definitions for the data structures given in lecture, we mapped out how the mesh would look before and after splitting one edge.
-		<figure>
-			<img src="splitedge.png" alt="Half-Edge Diagram for an Edge Split" style="width:75%"/>
-			<figcaption>Half-Edge Diagram before and after an Edge Split</figcaption>
-		</figure>
-		This was slightly more complicated because instead of just reassigning pointers, we had to create new ones. When we did edge flips we tried to minimize the number of objects we had to work with to avoid errors but since we were working with so many new pointers in this step we ended up assigning all the pointers in the diagram above. We first assigned / initialized the pointers.
-		After the boundary edge check, we assigned pointers to all the elements we see in the before diagram. Then we initialized the new pointers we would need (1 more vertex, 3 new edges, 6 more half-edges, and 2 more faces). Then we reassigned the values based on what we see in the after diagram. The final step was to set the position for <code>v4</code> as the midpoint of <code>v0</code> and <code>v1</code>.
+        <h3>Part 5: Edge split</h3>
+        Since we don't want to split boundary edges, the first part of our code is a check that just returns the inputted edge if it is a boundary.
+        To figure out how to reassign pointers for this part, based on the definitions for the data structures given in lecture, we mapped out how the mesh would look before and after splitting one edge.
+        <figure>
+            <img src="splitedge.png" alt="Half-Edge Diagram for an Edge Split" style="width:75%"/>
+            <figcaption>Half-Edge Diagram before and after an Edge Split</figcaption>
+        </figure>
+        This was slightly more complicated because instead of just reassigning pointers, we had to create new ones. When we did edge flips we tried to minimize the number of objects we had to work with to avoid errors but since we were working with so many new pointers in this step we ended up assigning all the pointers in the diagram above. We first assigned / initialized the pointers.
+        After the boundary edge check, we assigned pointers to all the elements we see in the before diagram. Then we initialized the new pointers we would need (1 more vertex, 3 new edges, 6 more half-edges, and 2 more faces). Then we reassigned the values based on what we see in the after diagram. The final step was to set the position for <code>v4</code> as the midpoint of <code>v0</code> and <code>v1</code>.
 
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="presplits.png" width="400px"/>
-				  <figcaption>Teapot Before Edge Splits</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="postsplits.png" width="400px"/>
-				  <figcaption>Teapot After Edge Splits</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="presplits.png" width="400px"/>
-				  <figcaption>Teapot Before Edge Splits and Edge Flips</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="postsplitsflips.png" width="400px"/>
-				  <figcaption>Teapot After Edge Splits and Edge Flips</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center;">
+                  <img src="presplits.png" width="400px"/>
+                  <figcaption>Teapot Before Edge Splits</figcaption>
+                </td>
+                <td style="text-align: center;">
+                  <img src="postsplits.png" width="400px"/>
+                  <figcaption>Teapot After Edge Splits</figcaption>
+                </td>
+              </tr>
+              <tr>
+                <td style="text-align: center;">
+                  <img src="presplits.png" width="400px"/>
+                  <figcaption>Teapot Before Edge Splits and Edge Flips</figcaption>
+                </td>
+                <td style="text-align: center;">
+                  <img src="postsplitsflips.png" width="400px"/>
+                  <figcaption>Teapot After Edge Splits and Edge Flips</figcaption>
+                </td>
+              </tr>
+            </table>
+        </div>
+
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
 		</div>
 	</body>
 </html>
