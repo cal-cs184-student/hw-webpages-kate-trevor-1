@@ -194,7 +194,7 @@
             <figcaption>Half-Edge Diagram before and after an Edge Split</figcaption>
         </figure>
         This was slightly more complicated because instead of just reassigning pointers, we had to create new ones. When we did edge flips we tried to minimize the number of objects we had to work with to avoid errors but since we were working with so many new pointers in this step we ended up assigning all the pointers in the diagram above. We first assigned / initialized the pointers.
-        After the boundary edge check, we assigned pointers to all the elements we see in the before diagram. Then we initialized the new pointers we would need (1 more vertex, 3 new edges, 6 more half-edges, and 2 more faces). Then we reassigned the values based on what we see in the after diagram. The final step was to set the position for <code>v4</code> as the midpoint of <code>v0</code> and <code>v1</code>.
+        After the boundary edge check, we assigned pointers to all the elements we see in the before diagram. Then we initialized the new pointers we would need (1 more vertex, 3 new edges, 6 more half-edges, and 2 more faces). Then we reassigned the values based on what we see in the after diagram. The final step was to set <code>isNew</code> values for the vertices and the position for <code>v4</code> as the midpoint of <code>v0</code> and <code>v1</code>.
 
         <div style="display: flex; flex-direction: column; align-items: center;">
             <table style="width: 100%; text-align: center; border-collapse: collapse;">
