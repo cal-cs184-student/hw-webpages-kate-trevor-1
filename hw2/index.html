@@ -249,6 +249,30 @@
 		</p>
 		<p>Our final step was looping through all of the vertices and reassigning the vertices <code>newPosition</code> to its <code>Position</code>, promptly setting us up for any future upsamplings.</p>
 
+		<h4>Torus Subdivisions</h4>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="torus_0.png" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+				  <img src="torus_2.png" width="400px"/>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="torus_3.png" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+				  <img src="torus_4.png" width="400px"/>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		<p>
+			After subdividing, the sharp corners and edges become more rounded and smoother. Additionally, the number of faces and vertices increases, creating a more detailed mesh.
+		</p>
 		<h4>Cube Subdivisions</h4>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -276,9 +300,6 @@
 			  </tr>
 			</table>
 		</div>
-		<p>
-			After subdividing, the sharp corners and edges become more rounded and smoother. Additionally, the number of faces and vertices increases, creating a more detailed mesh.
-		</p>
 		<p>
 			The cube is asymmetic after repeated subdivisions since each face only had one diagonal edge (unequal). We can conduct some pre-processing by splitting across the middle of each face and creating a diagonal edge. This way, the cube will subdivide symmetrically.
 		</p>
