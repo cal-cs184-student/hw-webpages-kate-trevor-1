@@ -137,10 +137,55 @@
 		</div>
 
 		<h3>Part 4: Edge flip</h3>
+		To figure out how to reassign pointers for this part, based on the definitions for the data structures given in lecture, we mapped out how the mesh would look before and after flipping one edge.
 		<figure>
 			<img src="edgeflip.png" alt="Half-Edge Diagram for an Edge Flip" style="width:100%"/>
 			<figcaption>Half-Edge Diagram for an Edge Flip</figcaption>
 		</figure>
+
+		When we perform an edge flip, this is how the pointers can change. A blue highlighted cell indicates the original pointer changed after the flip and a grey cell indicates that the respective pointer is irrelevant to the problem and does not change.
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="halfedges-flip.png" width="400px"/>
+				  <figcaption>Pointers for Half-Edges</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="edges-flip.png" width="400px"/>
+				  <figcaption>Pointers for Edges</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="vertices-flip.png" width="400px"/>
+				  <figcaption>Pointers for Vertices</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="faces-flip.png" width="400px"/>
+				  <figcaption>Pointers for Faces</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+
+		Clearly, only the half-edges 0-5 are different (at least the way we assigned them), so those are the only ones we should define and change. Since <code>h1</code> and <code>h4</code> only had its <code>next</code> value changed, we set its neighbors first. Then we set <code>h2</code> and <code>h5</code> since we could use the references to <code>f0</code> and <code>f1</code> using <code>h1</code> and <code>h4</code>, and we finished by setting <code>h0</code> and <code>h3</code> last.
+		We aren't entirely sure why we needed to define the face pointers to finish this task, but we found that if we didn't, sometimes flipping the edges would cause the face to disappear (summarizes our debugging journey).
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="preflips.png" width="400px"/>
+				  <figcaption>Teapot Before Edge Flips</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="postflips.png" width="400px"/>
+				  <figcaption>Teapot After Edge Flips</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h3>Part 5: Edge split</h3>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
