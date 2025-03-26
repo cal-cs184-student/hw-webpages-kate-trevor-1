@@ -81,6 +81,8 @@
 		<h2>Part 2: Bounding Volume Hierarchy</h2>
 		To construct a Bounding Volume Hierarchy (BVH), we began by defining two BBox variables, one to represent the overall bbox, and another to represent the centroid of each bbox. In order to build the initial BBox, we looped through the scene's primitives and expanded the bbox to include the bounding box of each primitive. We then calculated the centroid of the bbox and expanded the <code>centroid_box</code> variable accordingly. The latter will be used for our heuristic, which determines the split point based upon the axes that has the greatest spread of centroids (determined by checking the extent of the <code>centroid_box</code>). Afterwards, we created a new <code> BVHNode </code> with the constructed bbox. If we reached a list of primitives that was no more than <code>max_leaf_size</code>, we have hit a leaf and would update the node's start and end values accordingly. Recursively, we would then split the primitives into two groups based on the split point and reassign the original primitives listing based on the <code>split_point</code>. In the case that either of the groups was empty after splitting, we would add the first value of the other group into the empty one and delete it from it's original list. 
 
+		<p>For debugging the BBox intersection implementation, we briefly explored the use of LLMs for debugging and found it useful for catching smaller errors such as using x rather than z when calculating tz_min and tz_max.</p>
+
 		<p>
 			Below are some large .dae files that were rendered with BVH acceleration.
 		</p>
