@@ -36,7 +36,6 @@
 		
 		<figure>
 			<img src="cornell.png" alt="Cornell Boxes with Bunnies" style="width:70%"/>
-			<figcaption>You can add images with captions!</figcaption>
 		</figure>
 
 		<!--
@@ -47,26 +46,29 @@
 		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 		<h2>Part 1: Ray Generation and Scene Intersection</h2>
-        @Stacey ray generation thought process <br/>
+        <p>
+			To generate rays, we needed to convert the provided the normalized x and y coordinates from image space into camera space to generate the ray and finally, into world space. The provided vFov and hFov are in degrees, so we began by converting it into radians, multiplying it by 0.5, and taking the 2*tangent of this value. Afterwards, we multiplied <code>2* tan(radians(hFov)*0.5)</code> by (x-0.5) and <code>2* tan(radians(vFov)*0.5)</code> by (y-0.5) to get the x and y coordinates in camera space. Since the camera space has a different coordinate system, we can pass in our camera space x and y coordinates into a Vector3D alongside -1 for the Z coordinate to create our ray direction. We then transformed this ray into world space by multiplying the ray by the cameraToWorld matrix (<code>c2w</code>) and normalize it. The world_space_ray can then be created by passing in the origin and direction of the ray. We then assign the min_t and max_t of the created Ray to nclip and fclip respectively.
+		</p>
+		<p>
+			When generating pixel samples, we looped through number of samples times to generate the specified number of rays. Inside of each iteration, we would generate a random sample using <code>gridSampler->get_sample()</code> and define the current x/y values by adding the sample's x and y values to the current pixel's x and y values. We then divide the current x and y values by the width and height of the sample buffer. The current ray can be created using camera's generate_ray function with the current x and y values as the input and by setting the ray's depth to the max ray depth. The result of 
+			calling <code>est_radiance_global_illumination(Ray r)</code> to estimate the scene radiance along the curr_ray and then incorporate it into the Monte Carlo estimate of the Vector3D value of the pixel is added to an average variable. Once the loop is completed, we divide the average by the number of samples to get the final pixel value (updated in the respective sample buffer location).
+		</p>
+		<p>
+	        In order to determine if a ray (within the boundaries of the t values) and a triangle intersect and to determine the values for that intersection we can use the Möller Trumbore Algorithm. Assuming a ray is of infinite length, the algorithm gives us the barycentric coordinates of the intersection of the ray with the plane the triangle is on. There are two checks we need to perform to determine if there is an intersection for this particular function. First, that the point of intersection actually lies within the bounds of the triangle which we can do by checking that the barycentric coordinates are all between 0 and 1. Second, we need to make sure that the value of t at the intersection falls within min_t and max_t of the input ray. For ray intersection of a sphere, we used the formulas given in lecture 9/10 similarly, making sure that the t value at the points of intersection fall within our given range. For the sphere, we can have 0-2 points of intersection since the equation we solve to determine the points is a quadratic.
+		</p>
 
-        @Stacey lmk if this looks ok for task 2
-        When generating pixel samples, our biggest challenge is to transform the camera coordinates to world space coordinates. Our camera viewspace is given to us as a 1 x 1 unit square where the bottom left of that square is equivalent to the origin of our world space coordinate system. We need to translate and scale this to match our world coordinates, so we can do this by shifting the 1 x 1 square to center it at the origin (translate by 0.5 to the left and 0.5 units down) and then scale each coordinate by the width and height of our world space respectively.
-
-        In order to determine if a ray (within the boundaries of the t values) and a triangle intersect and to determine the values for that intersection we can use the Möller Trumbore Algorithm. Assuming a ray is of infinite length, the algorithm gives us the barycentric coordinates of the intersection of the ray with the plane the triangle is on. There are two checks we need to perform to determine if there is an intersection for this particular function. First, that the point of intersection actually lies within the bounds of the triangle which we can do by checking that the barycentric coordinates are all between 0 and 1. Second, we need to make sure that the value of t at the intersection falls within min_t and max_t of the input ray. For ray intersection of a sphere, we used the formulas given in lecture 9/10 similarly, making sure that the t value at the points of intersection fall within our given range. For the sphere, we can have 0-2 points of intersection since the equation we solve to determine the points is a quadratic.
-
-        @Stacey can you add the images since my computer is tweaking
 
         <p>Some images with normal shading</p>
         <div style="display: flex; flex-direction: column; align-items: center;">
             <table style="width: 100%; text-align: center; border-collapse: collapse;">
               <tr>
                 <td style="text-align: center;">
-                  <img src="cornell.png" width="400px"/>
-                  <figcaption>Caption goes here.</figcaption>
+                  <img src="CBgems_screenshot_3-25_22-37-28.png" width="400px"/>
+                  <figcaption>CBgems.dae</figcaption>
                 </td>
                 <td style="text-align: center;">
-                  <img src="cornell.png" width="400px"/>
-                  <figcaption>Caption goes here.</figcaption>
+                  <img src="CBspheres.png" width="400px"/>
+                  <figcaption>CBSpheres.dae</figcaption>
                 </td>
               </tr>
             </table>
@@ -74,6 +76,33 @@
 		
 		<h2>Part 2: Bounding Volume Hierarchy</h2>
 		To construct a Bounding Volume Hierarchy (BVH), we began by defining two BBox variables, one to represent the overall bbox, and another to represent the centroid of each bbox. In order to build the initial BBox, we looped through the scene's primitives and expanded the bbox to include the bounding box of each primitive. We then calculated the centroid of the bbox and expanded the <code>centroid_box</code> variable accordingly. The latter will be used for our heuristic, which determines the split point based upon the axes that has the greatest spread of centroids (determined by checking the extent of the <code>centroid_box</code>). Afterwards, we created a new <code> BVHNode </code> with the constructed bbox. If we reached a list of primitives that was no more than <code>max_leaf_size</code>, we have hit a leaf and would update the node's start and end values accordingly. Recursively, we would then split the primitives into two groups based on the split point and reassign the original primitives listing based on the <code>split_point</code>. In the case that either of the groups was empty after splitting, we would add the first value of the other group into the empty one and delete it from it's original list. 
+
+		<p>
+			Below are some large .dae files that were rendered with BVH acceleration.
+		</p>
+
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <table style="width: 100%; text-align: center; border-collapse: collapse;">
+              <tr>
+                <td style="text-align: center;">
+                  <img src="large_dae_blucy.png" width="400px"/>
+                  <figcaption>blucy.dae</figcaption>
+                </td>
+                <td style="text-align: center;">
+                  <img src="large_dae_dragon.png" width="300px"/>
+                  <figcaption>dragon.dae</figcaption>
+                </td>
+				<td style="text-align: center;">
+					<img src="maxplanck_screenshot_3-25_22-43-5.png" width="400px"/>
+					<figcaption>MaxPlanck.dae</figcaption>
+				  </td>
+              </tr>
+            </table>
+        </div>
+
+		<p> 
+			With the BVH acceleration structure, we were able to render the following files with significant speedup. For example, the blucy.dae took 0.3200s with BVH acceleration while it took 1138.0018s without the acceleration. Similarly, the dragon.dae took 5.7334s with BVH acceleration and over 10 minutes without and the MaxPlanck.dae took 0.2849s with BVH acceleration and 33.8243s without.
+		</p>
 
 		<h2>Part 3: Direct Illumination</h2>
         Direct lighting with Uniform Hemisphere Sampling: for uniform hemisphere sampling, for each ray casted we want to calculate how much light is reflected back to the camera at the point of intersection. We can estimate amount of light that arrived at the intersection point using Monte Carlo Integration
