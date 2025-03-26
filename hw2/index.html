@@ -222,8 +222,87 @@
         </div>
 
 		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		In order to implement loop subdivision, we began by calculating the updated positions for the old and new vertices. We began by iterating through the old vertices and storing the new positions into Vertex::newPosition.
+		<p>
+			These were calculated using the formula:
+			<br/>
+			<br/>
+			\( ((1 - n * u) * original Position + u * original Neighbor Position Sum) \)
+			<br/>
+			<br/>
+			where \( n \) is the number of neighbors (vertex degree) and \( u \) is 3/16 if the vertex has three neighbors and 3/(8n) otherwise. 
+		</p>
+		<p>
+			We defined the new vertex position given 4 vertices, A, B, C, and D as:
+			<br/>
+			<br/>
+			\( (3/8 * (A + B) + 1/8 * (C + D)) \)
+			<br/>
+			<br/>
+			To retrieve vertices A, B, C, and D, we looped through the mesh edges and stored our resulting vertex into edge's newPosition. When iterating through both the original vertices and edges, we made sure to set isNew to false. 
+		</p>
+		<p>
+			After finding all the new positions, we iterated through the edges again and called <code>splitEdge</code> on all of the old edges. To do so, we check that both of the corresponding vertices were old. The resulting <code>VertexIter</code>'s newPosition was set to the new position of the edge (retrieved in the previous part). Inside of the <code>splitEdge</code> method, reassigning the new edges as isNew (true or false) was taken care of. 
+		</p>
+		<p>
+			In order to flip the edges. we iterated through the edges one last time. If the edge corresponded to an old vertex and a new vertex and the edge returned true for <code>isNew</code>, we called <code>flipEdge</code>.
+		</p>
+		<p>Our final step was looping through all of the vertices and reassigning the vertices <code>newPosition</code> to its <code>Position</code>, promptly setting us up for any future upsamplings.</p>
 
+		<h4>Torus Subdivisions</h4>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="torus_0.png" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+				  <img src="torus_2.png" width="400px"/>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="torus_3.png" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+				  <img src="torus_4.png" width="400px"/>
+				</td>
+			  </tr>
+			</table>
 		</div>
+		<p>
+			After subdividing, the sharp corners and edges become more rounded and smoother. Additionally, the number of faces and vertices increases, creating a more detailed mesh.
+		</p>
+		<h4>Cube Subdivisions</h4>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="cube6_1.jpeg" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+				  <img src="cube6_2.jpeg" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+					<img src="cube6_3.jpeg" width="400px"/>
+				  </td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="cube6_4.jpeg" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+				  <img src="cube6_5.jpeg" width="400px"/>
+				</td>
+				<td style="text-align: center;">
+					<img src="cube6_6.jpeg" width="400px"/>
+				  </td>
+			  </tr>
+			</table>
+		</div>
+		<p>
+			The cube is asymmetic after repeated subdivisions since each face only had one diagonal edge (unequal). We can conduct some pre-processing by splitting across the middle of each face and creating a diagonal edge. This way, the cube will subdivide symmetrically.
+		</p>
+		<p>Given the multi-step process, we found it simpler to break down the individual steps when debugging. For example, when running into infinite loops, we commented out the edgeSplitting iteration and reran to code. When the code ran smoothly, we narrowed down our focus and began checking our logic for the splitting process. This way, we were able to catch smaller bugs in our conditionals and ensure that we were properly assigning isNew throughout each step.</p>
 	</body>
 </html>
