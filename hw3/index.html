@@ -116,14 +116,10 @@
         Direct lighting by Importance Sampling Lights: for this kind of direct light it was important to iterate through all the scene lights and checking is_delta_light to check the light source.
 		
 		<h2>Part 4: Global Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		For our indirect lighting function, we updated our <code>est_radiance_global_illumination</code> as well as <code>at_least_one_bounce_radiance</code> to return one bounce radiance and recursively call additional bounces. To account for this, we used the coin flip method with the probability of 0.65 for returning true. If true was returned, the ray depth was less than 1, <code>cos_theta</code> was greater than 2, and there was a bvh intersection between the ray and an Intersection, <code>&isect2</code>, we would recursively call the <code>at_least_one_bounce_radiance</code> method and multiplied the result by <code>sample_f</code>(stored as f) and cos_theta before dividing it by the pdf and coin flip probability. This final result was appended onto <code>L_out</code>. This would allow us to account for Russian Roulette (random termination). Within sample_f, we randomly sampled the incoming ray direction and set the resulting direction/probability to wi and pdf respectively. We also updated the <code>est_radiance_global_illumination</code> method to call the <code>at_least_one_bounce_radiance</code> method and return the total radiance.
 
 		<h2>Part 5: Adaptive Sampling</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-		<h2>(Optional) Part 6: Extra Credit Opportunities</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		
 		</div>
 	</body>
 </html>
