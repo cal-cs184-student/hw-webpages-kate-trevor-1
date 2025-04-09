@@ -136,10 +136,68 @@
 			</table>
 		</div>
 		<p>
-			In terms of damping, the 
+			In terms of damping, a higher damping value results in a slower cloth falling animation and has less of a bounce. The lower damping values allows for the cloth to fall faster and bounce more (more follow-through after the initial drop). 
 		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="0.1damping.png" width="400px"/>
+					<figcaption>0.1% damping bouncing back</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="5000ks2pin.png" width="400px"/>
+					<figcaption>0.5% damping</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="0.8damping.png" width="400px"/>
+					<figcaption>0.8% damping falling down</figcaption>
+				</td>
+			</tr>
+			</table>
+			<p> 
+				Below, is what the cloth looks like with default parameters and 4 pinned corners instead of 2.
+			</p>
+			<figure>
+				<img src="4pinshaded.png" alt="Shaded 4 Pin Cloth" style="width:70%"/>
+			</figure>
+	
+		</div>
+		
 		<h2>Part 3: Handling collisions with other objects</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			To handle collisions with spheres, we first checked if the position was inside of the sphere by checking the distance between the point mass and the center of the sphere. If the point mass's position is inside the sphere, we determined the tangent point (the point on the sphere closest to the point mass) and then moved the point mass to that tangent point. We calculated how much to move the last position (correction vector) by subtracting the tangent point from the last position. We then added that value scaled by the friction (1 - f) to the current position to get the new position.
+		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="500 ks sphere.png" width="400px"/>
+					<figcaption>500 N/m Sphere</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="5000 ks sphere.png" width="400px"/>
+					<figcaption>5000 N/m Sphere</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="50000 ks sphere.png" width="400px"/>
+					<figcaption>50,000 N/m Sphere</figcaption>
+				</td>
+			</tr>
+		</table>
+		</div>
+		<p>
+			The spring constants of the sphere (ks) also impacted the cloth simulation. For the 500 N/m sphere, the cloth was the stretchiest and had the most folds. The default 5,000 N/m sphere was the most stable and had the least amount of folds. The 50,000 N/m sphere was the stiffest and had the largest/least number of folds.
+		</p>
+		<p>
+			For handling collision with the plane, we followed a similar approach, beginning with a check on whether the point mass's position and last position were on different sides of the plane (took the dot product of the last position or position subtracted by the point against the normal). If they were, then we calculated the distance from the point mass to the plane and then found its corresponding tangent (position subtracted by distance). We also added a small offset to the tangent point to move the cloth up. The offset was reversed if the point mass was below the plane. Finally, we updated the position of the point mass based on the offset + last position + correction vector scaled by the friction (1 - f).
+		</p>
+	
+		<figure>
+			<img src="peaceful plane.png" alt="Peaceful Plane" style="width:70%"/>
+			<figcaption>Cloth On a Plane</figcaption>
+		</figure>
 
 		<h2>Part 4: Handling self-collisions</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
