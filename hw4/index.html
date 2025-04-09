@@ -28,19 +28,18 @@
 	<body>
 		<div class="container">
 		<h1>CS184/284A Spring 2025 Homework 4 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+		<div style="text-align: center;">Names: Samhita Ghosh, Stacey Lei </div>
 
 		<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to webpage: <a href="https://github.com/cal-cs184-student/hw-webpages-kate-trevor-1">https://github.com/cal-cs184-student/hw-webpages-kate-trevor-1</a>
 
 		<br>
 
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw4-1stfloorsoda">https://github.com/cal-cs184-student/sp25-hw4-1stfloorsoda</a>
 
 		<figure>
 			<img src="clothsim.png" alt="Cloth draped over sphere" style="width:70%"/>
-			<figcaption>You can add images with captions!</figcaption>
 		</figure>
 
 		<!--
@@ -48,40 +47,97 @@
 		-->
 
 		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+		Thoughout this assignment, we implemented a cloth simulation using a mass-spring system and then explored various methods for handling collisions. To do so, we computed the force on each point mass and implemented Verlet's Integration to compute the position of the cloth at each time step. To make our cloth simulation more realistic, we added constraints to the system to prevent the cloth from over-stretching. We also added accounted for self-collisions and collisions against other objects, such as a sphere or plane. Finally, we wrote various shaders such as diffuse, Blinn-Phong, and texture mapping. Bump and displacement mapping were also implemented to add more realism to the cloth simulation.
 
 		<h2>Part 1: Masses and springs</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>
+			The first step of this project was the create the mass-spring grid. Below are some screenshots of the grid with different constraints visible.
+		</p>
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="withoutshearing.png" width="400px"/>
+					<figcaption>Without Shearing</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="withoutshearingcloseup.png" width="400px"/>
+					<figcaption>Without Shearing Close-Up</figcaption>
+				</td>
+			</tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
+					<img src="onlyshearing.png" width="400px"/>
+					<figcaption>Only Shearing Constraints</figcaption>
+				  </td>
+				  <td style="text-align: center;">
+					<img src="onlyshearingcloseup.png" width="400px"/>
+					<figcaption>Only Shearing Constraints Close-Up</figcaption>
+				  </td>
+			</tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="spring4alltogether.png" width="400px"/>
+				  <figcaption>All Constraints</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="clothsim.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
+					<img src="allspringcloseup.png" width="400px"/>
+					<figcaption>All Constraints Close-Up</figcaption>
+				  </td>
 			  </tr>
 			</table>
 		</div>
 
 		<h2>Part 2: Simulation via numerical integration</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+		<p>
+			For the second task, we computed the total force on each point mass and used Verlet's Integration to compute the position of the cloth at each time step. We also added constraints to the system to prevent the cloth from stretching more than 1.1x its resting length. 
+		</p>
+		<p>
+			Once our implementation was complete, we began experimenting with different parameters. When changing the ks (spring constant), we observed that a lower ks value resulted in a looser cloth whereas a higher ks value correlated with a tighter cloth. Below, we have included some screenshots of the cloth simulation with different ks values; the 1,000 N/m cloth has the most stretching (most prominent folds) compared to the default 5,000 N/m and 15,000 N/m cloths. On a similar note, the 15,000 N/m is the stiffest, exhibited by its minimal folds.
+		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="1000ks2pin.png" width="400px"/>
+					<figcaption>1,000 N/m Cloth</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="5000ks2pin.png" width="400px"/>
+					<figcaption>5,000 N/m Cloth</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="15000ks2pincloth.png" width="400px"/>
+					<figcaption>15,000 N/m Cloth</figcaption>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<p>
+			With lower density values, the cloth bounces less due to the lower mass at each point. Visually, it appears lighter as it is able to hang closer to its two pins. Vice versa, the higher density cloth (70 g/cm^2) is heavier and thus, it bounces more. It also hangs lower than the other two cloths. 
+		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="1density.png" width="400px"/>
+					<figcaption>1 g/cm^2</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="5000ks2pin.png" width="400px"/>
+					<figcaption>15 g/cm^2</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="70density.png" width="400px"/>
+					<figcaption>70 g/cm^2</figcaption>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<p>
+			In terms of damping, the 
+		</p>
 		<h2>Part 3: Handling collisions with other objects</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
