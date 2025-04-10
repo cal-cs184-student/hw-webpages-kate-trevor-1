@@ -207,19 +207,38 @@
 		The vertex shader and the fragment shader are the two primary shader types that combine to produce visual realism in OpenGL. For activities like applying displacement maps, the vertex shader changes each vertex's location and normal vectors before passing the updated data onward. After rasterization, the fragment shader uses the interpolated geometry data from the vertex shader to process each generated fragment, which is a sample of pixels. The pixel-level details that show on the screen are created by computing the final color at each position and writing it to out_color.
 		The shaders control how light interacts with objects which we need for realistic rendering.
 
-		<h2>(Optional) Part 6: Extra Credit - Additional cloth simulation features!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
+		The Blinn-Phong shading model incorporates three essential lighting elements:
+		Ambient: This refers to consistent background illumination that softens harsh shadows in poorly lit regions. It provides the object with a baseline lighting and is controlled by the coefficient k_a.
+		Diffuse: Depending on the angle between the surface normal and the light source, diffue shading uses Lambert's Cosine Law to determine how much light strikes a surface directly. The diffuse component reflects the object's base hue and is independent of the viewer’s perspective.
+		Specular: Depending on the viewing angle, specular shading creates the illusion of glittering highlights. Blinn-Phong uses the angle between the surface normal and the bisector between the light direction and the view direction. The p value controls the sharpness of the specular highlight and controls the rate at which the highlight deviates from the point of maximum reflection. A narrower and glossier highlight is the result of a higher p value.
+		To determine the final shaded color of each point on the surface, the three components are first calculated independently and then merged.
+
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="500 ks sphere.png" width="400px"/>
+					<!-- REPLACE IMAGE -->
+					<figcaption>Texture mapping shader using custom texture</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="5000 ks sphere.png" width="400px"/>
+					<!-- REPLACE IMAGE -->
+					<figcaption>Mirror shader on cloth and sphere</figcaption>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: center;">
+					<img src="5000 ks sphere.png" width="400px"/>
+					<!-- REPLACE IMAGE -->
+					<figcaption>Bump mapping on cloth and sphere</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="50000 ks sphere.png" width="400px"/>
+					<figcaption>Displacement mapping on sphere</figcaption>
+				</td>
+			</tr>
+		</table>
+		<!-- ADD COMME NTS ON BUMP VS DISPLACEMENT MAPPING -->
 		</div>
 	</body>
 </html>
