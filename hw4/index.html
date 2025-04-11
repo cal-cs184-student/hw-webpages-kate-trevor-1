@@ -205,18 +205,23 @@
 		To implement self-collision, we iterated through each point mass (candidates) and calculated its distance from the parameter point mass. If the distance was less the 2*thickness and the candidate point mass was not the same as the point mass passed in, we would determine its correction vector by multiplying the direction by the distance - 2*thickness. The correction for each point is then averaged and scaled by the simulation step before it is added to the point mass's position.
 
 		<h2>Part 5: Shaders</h2>
-		In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are frequently written in GLSL and are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
-		The vertex shader and the fragment shader are the two primary shader types that combine to produce visual realism in OpenGL. For activities like applying displacement maps, the vertex shader changes each vertex's location and normal vectors before passing the updated data onward. After rasterization, the fragment shader uses the interpolated geometry data from the vertex shader to process each generated fragment, which is a sample of pixels. The pixel-level details that show on the screen are created by computing the final color at each position and writing it to out_color.
-		The shaders control how light interacts with objects which we need for realistic rendering.
-
+		<p>
+			In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are frequently written in GLSL and are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
+			The vertex shader and the fragment shader are the two primary shader types that combine to produce visual realism in OpenGL. For activities like applying displacement maps, the vertex shader changes each vertex's location and normal vectors before passing the updated data onward. After rasterization, the fragment shader uses the interpolated geometry data from the vertex shader to process each generated fragment, which is a sample of pixels. The pixel-level details that show on the screen are created by computing the final color at each position and writing it to out_color.
+			The shaders control how light interacts with objects which we need for realistic rendering.
+		</p>
+		<p>
 		The Blinn-Phong shading model incorporates three essential lighting elements:
+		<br>
 		Ambient: This refers to consistent background illumination that softens harsh shadows in poorly lit regions. It provides the object with a baseline lighting and is controlled by the coefficient k_a.
+		<br>
 		Diffuse: Depending on the angle between the surface normal and the light source, diffue shading uses Lambert's Cosine Law to determine how much light strikes a surface directly. The diffuse component reflects the object's base hue and is independent of the viewer’s perspective.
+		<br>
 		Specular: Depending on the viewing angle, specular shading creates the illusion of glittering highlights. Blinn-Phong uses the angle between the surface normal and the bisector between the light direction and the view direction. The p value controls the sharpness of the specular highlight and controls the rate at which the highlight deviates from the point of maximum reflection. A narrower and glossier highlight is the result of a higher p value.
+		<br>
 		To determine the final shaded color of each point on the surface, the three components are first calculated independently and then merged.
+		</p>
 
-		<!-- ADD COMME NTS ON BUMP VS DISPLACEMENT MAPPING -->
-		 @SAMHITA, I'VE ADDED THE FILES HERE WITH DESCRIPTIONS. FEEL FREE TO MOVE THEM WHEREVER
 		<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
@@ -240,9 +245,14 @@
 			</tr>
 		</table>
 
-		<figure>
-			<img src="minecraft_brick.png" alt="Custom Brick Texture" style="width:70%"/>
-		</figure>
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="minecraft_brick.png" width="400px"/>
+					<figcaption>Texture Mapping Shader using Minecraft Brick Custom Texture</figcaption>
+				</td>
+			</tr>
+		</table>
 
 		<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
@@ -265,7 +275,12 @@
 					<figcaption>Displacement on Sphere</figcaption>
 				</td>
 			</tr>
+		</table>
+		<p>
+		Bump mapping gives the illusion of texture on a surface—only an illusion because the actual geometry doesn’t change, so the surface is always smooth, even if the texture looks bumpy. Both the cloth and the sphere exhibit this effect. However, displacement mapping takes things a step further. It changes the object's geometry (the vertices) according to the displacement map. This gives the texture more depth and realism. Furthermore, with Blinn-Phong shading, displacement-mapped objects typically have more noticeable specular highlights since the updated geometry adds more variances in the way light reflects off the surface.
+		</p>
 
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
 					<img src="displacement_sphere_only.png" width="400px"/>
@@ -277,12 +292,31 @@
 				</td>
 			</tr>
 		</table>
-		<figure>
-			<img src="mirror.png" alt="Mirror Sphere" style="width:70%"/>
-		</figure>
-		<figure>
-			<img src="custom.png" alt="Custom Sphere" style="width:70%"/>
-		</figure>
+		<p>
+		16 vs 128 stuff
+		</p>
+
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="mirror.png" width="400px"/>
+					<figcaption>Mirror Shading on Cloth</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="mirror-sphere.png" width="400px"/>
+					<figcaption>Mirror Shading on Sphere</figcaption>
+				</td>
+			</tr>
+		</table>
+
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="custom.png" width="400px"/>
+					<figcaption>Custom Shader</figcaption>
+				</td>
+			</tr>
+		</table>
 		</div>
 	</body>
 </html>
