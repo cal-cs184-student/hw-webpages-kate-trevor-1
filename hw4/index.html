@@ -206,7 +206,13 @@
 		</figure>
 
 		<h2>Part 4: Handling self-collisions</h2>
-		To implement self-collision, we iterated through each point mass (candidates) and calculated its distance from the parameter point mass. If the distance was less the 2*thickness and the candidate point mass was not the same as the point mass passed in, we would determine its correction vector by multiplying the direction by the distance - 2*thickness. The correction for each point is then averaged and scaled by the simulation step before it is added to the point mass's position.
+		<p>
+			To implement self-collision, we first called <code> build_spatial_map </code> to populate the map with all point masses based on the returning value of <code>hash_position</code>. We then iterated through each point mass and called self_collide on point mass with the provided <code> simulation_steps</code>. For each point mass candidates, we determined the hash by mapping the 3D position to a float. If the hash exists, calculated its direction between the point mass and point mass candidate. 
+		</p>
+		<p>
+			If the normalized direction was less the 2*thickness and the candidate point mass was not the same as the point mass passed in, we would add onto the correction vector, by multiplying the direction by the 2*thickness - direction normalized. We also kept a counter and would increment for each correction added. The correction for each point is then averaged using the counter and scaled by the simulation step before it is added to the point mass's position.
+		</p>
+
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
@@ -224,6 +230,10 @@
 				</td>
 			</tr>
 			</table>
+		</div>
+		<p> 
+			When varying density and ks, we observed that the self-collision
+		</p>
 
 		<h2>Part 5: Shaders</h2>
 		In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are frequently written in GLSL and are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
@@ -300,6 +310,9 @@
 		</table>
 		<figure>
 			<img src="mirror.png" alt="Mirror Sphere" style="width:70%"/>
+		</figure>
+		<figure>
+			<img src="mirrorSphere.png" alt="Mirror Sphere" style="width:70%"/>
 		</figure>
 		<figure>
 			<img src="custom.png" alt="Custom Sphere" style="width:70%"/>
