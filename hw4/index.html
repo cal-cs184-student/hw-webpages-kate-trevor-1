@@ -373,21 +373,8 @@
 			</tr>
 		</table>
 		<p>
-		The bump-mapped and displacement-mapped spheres don't really differ at a low resolution of 16x16; the surface details are sparse, and the general shapes look very similar. But the distinctions become more noticeable when the resolution increases to 128x128. The displacement-mapped sphere's surface details become more noticeable, and its edges are crisper and more defined. Furthermore, because there are fewer vertices available for adjustment at lower resolutions, displacement mapping may result in noticeable warping or deformation of the sphere's form. At higher resolutions, the sphere also retains its general shape considerably better.
+		The small details that differentiate bump and displacement become more noticeable when the resolution increases to 128x128. The displacement-mapped sphere's surface details become more noticeable, and its edges are crisper and more defined. Furthermore, because there are fewer vertices available for adjustment at lower resolutions, displacement mapping may result in noticeable warping or deformation of the sphere's form. At higher resolutions, the sphere also retains its general shape considerably better.
 		</p>
-		<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			<tr>
-				<td style="text-align: center;">
-					<img src="bump 16.png" width="400px"/>
-					<figcaption>Bump on Sphere 16</figcaption>
-				</td>
-				<td style="text-align: center;">
-					<img src="bump 128.png" width="400px"/>
-					<figcaption>Bump On Sphere 128</figcaption>
-				</td>
-			</tr>
-		</table>
-
 		<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
@@ -400,9 +387,13 @@
 				</td>
 			</tr>
 		</table>
-
+		I recently went to a glass museum over spring break and was inspired to create a shader that mimicked some of the color patterns I saw. Each fragment's distance from the origin is determined by the shader, which then uses sine and cosine (to get high frequencies) functions to produce quickly changing red, green, and blue values. As a result, the glass develops vivid, wavy color bands that extend outward like rainbow ripples. The colors alternate between bright and dark as the radius grows, creating a dynamic and colorful radial effect.
 		<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
+				<td style="text-align: center;">
+					<img src="chihuly.JPG" width="400px"/>
+					<figcaption>Chihuly Glass Museum</figcaption>
+				</td>
 				<td style="text-align: center;">
 					<img src="custom.png" width="400px"/>
 					<figcaption>Custom Shader</figcaption>
