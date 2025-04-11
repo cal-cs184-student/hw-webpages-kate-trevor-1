@@ -100,15 +100,15 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
-					<img src="1000ks2pin.png" width="400px"/>
+					<img src="1000ks2pinn.png" width="400px"/>
 					<figcaption>1,000 N/m Cloth</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="5000ks2pin.png" width="400px"/>
+					<img src="5000ks2pinn.png" width="400px"/>
 					<figcaption>5,000 N/m Cloth</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="15000ks2pincloth.png" width="400px"/>
+					<img src="15000ks2pinn.png" width="400px"/>
 					<figcaption>15,000 N/m Cloth</figcaption>
 				</td>
 			</tr>
@@ -121,15 +121,15 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
-					<img src="1density.png" width="400px"/>
+					<img src="1densitynew.png" width="400px"/>
 					<figcaption>1 g/cm^2</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="5000ks2pin.png" width="400px"/>
+					<img src="5000ks2pinn.png" width="400px"/>
 					<figcaption>15 g/cm^2</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="70density.png" width="400px"/>
+					<img src="70densitynew.png" width="400px"/>
 					<figcaption>70 g/cm^2</figcaption>
 				</td>
 			</tr>
@@ -142,15 +142,15 @@
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
-					<img src="0.1damping.png" width="400px"/>
+					<img src="0.1dampingnew.png" width="400px"/>
 					<figcaption>0.1% damping bouncing back</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="5000ks2pin.png" width="400px"/>
+					<img src="0.5 damping.png" width="400px"/>
 					<figcaption>0.5% damping</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="0.8damping.png" width="400px"/>
+					<img src="0.8dampingnew.png" width="400px"/>
 					<figcaption>0.8% damping falling down</figcaption>
 				</td>
 			</tr>
@@ -173,17 +173,17 @@
 		<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			<tr>
 				<td style="text-align: center;">
-					<img src="500 ks sphere.png" width="400px"/>
+					<img src="norm 500 ks sphere.png" width="400px"/>
 					<figcaption>500 N/m Sphere</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="5000 ks sphere.png" width="400px"/>
+					<img src="norm 5000 ks sphere.png" width="400px"/>
 					<figcaption>5000 N/m Sphere</figcaption>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align: center;">
-					<img src="50000 ks sphere.png" width="400px"/>
+					<img src="norm 50000 ks sphere.png" width="400px"/>
 					<figcaption>50,000 N/m Sphere</figcaption>
 				</td>
 			</tr>
@@ -200,9 +200,40 @@
 			<img src="peaceful plane.png" alt="Peaceful Plane" style="width:70%"/>
 			<figcaption>Cloth On a Plane</figcaption>
 		</figure>
+		<figure>
+			<img src="plane new.png" alt="Peaceful Plane" style="width:70%"/>
+			<figcaption>Cloth On a Plane Alt</figcaption>
+		</figure>
 
 		<h2>Part 4: Handling self-collisions</h2>
-		To implement self-collision, we iterated through each point mass (candidates) and calculated its distance from the parameter point mass. If the distance was less the 2*thickness and the candidate point mass was not the same as the point mass passed in, we would determine its correction vector by multiplying the direction by the distance - 2*thickness. The correction for each point is then averaged and scaled by the simulation step before it is added to the point mass's position.
+		<p>
+			To implement self-collision, we first called <code> build_spatial_map </code> to populate the map with all point masses based on the returning value of <code>hash_position</code>. We then iterated through each point mass and called self_collide on point mass with the provided <code> simulation_steps</code>. For each point mass candidates, we determined the hash by mapping the 3D position to a float. If the hash exists, calculated its direction between the point mass and point mass candidate. 
+		</p>
+		<p>
+			If the normalized direction was less the 2*thickness and the candidate point mass was not the same as the point mass passed in, we would add onto the correction vector, by multiplying the direction by the 2*thickness - direction normalized. We also kept a counter and would increment for each correction added. The correction for each point is then averaged using the counter and scaled by the simulation step before it is added to the point mass's position.
+		</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="earlyselfcollision.png" width="400px"/>
+					<figcaption>Early Self-Collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="midselfcollision.png" width="400px"/>
+					<figcaption>Mid Self-Collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="postselfcollision.png" width="400px"/>
+					<figcaption>Post Self-Collision</figcaption>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<p> 
+			When varying density and ks, we observed that the self-collision
+		</p>
 
 		<h2>Part 5: Shaders</h2>
 		<p>
@@ -303,7 +334,7 @@
 					<figcaption>Mirror Shading on Cloth</figcaption>
 				</td>
 				<td style="text-align: center;">
-					<img src="mirror-sphere.png" width="400px"/>
+					<img src="mirrorSphere.png" width="400px"/>
 					<figcaption>Mirror Shading on Sphere</figcaption>
 				</td>
 			</tr>
