@@ -237,9 +237,9 @@
 
 		<h2>Part 5: Shaders</h2>
 		<p>
-			In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are frequently written in GLSL and are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
+			In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
 			The vertex shader and the fragment shader are the two primary shader types that combine to produce visual realism in OpenGL. For activities like applying displacement maps, the vertex shader changes each vertex's location and normal vectors before passing the updated data onward. After rasterization, the fragment shader uses the interpolated geometry data from the vertex shader to process each generated fragment, which is a sample of pixels. The pixel-level details that show on the screen are created by computing the final color at each position and writing it to out_color.
-			The shaders control how light interacts with objects which we need for realistic rendering.
+			Essentially, the shaders control how light interacts with objects which we need for realistic rendering.
 		</p>
 		<p>
 		The Blinn-Phong shading model incorporates three essential lighting elements:
@@ -315,16 +315,26 @@
 			<tr>
 				<td style="text-align: center;">
 					<img src="displacement_sphere_only.png" width="400px"/>
-					<figcaption>Displacement on Sphere 16</figcaption>
+					<figcaption>Bump on Sphere (16x16)</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="displacement_sphere_only.png" width="400px"/>
+					<figcaption>Displacement on Sphere (16x16)</figcaption>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align: center;">
+					<img src="displacement sphere 128.png" width="400px"/>
+					<figcaption>Bump on Sphere (128x128)</figcaption>
 				</td>
 				<td style="text-align: center;">
 					<img src="displacement sphere 128.png" width="400px"/>
-					<figcaption>Displacement On Sphere 128</figcaption>
+					<figcaption>Displacement on Sphere (128x128)</figcaption>
 				</td>
 			</tr>
 		</table>
 		<p>
-		16 vs 128 stuff
+		The bump-mapped and displacement-mapped spheres don't really differ at a low resolution of 16x16; the surface details are sparse, and the general shapes look very similar. But the distinctions become more noticeable when the resolution increases to 128x128. The displacement-mapped sphere's surface details become more noticeable, and its edges are crisper and more defined. Furthermore, because there are fewer vertices available for adjustment at lower resolutions, displacement mapping may result in noticeable warping or deformation of the sphere's form. At higher resolutions, the sphere also retains its general shape considerably better.
 		</p>
 
 		<table style="width: 100%; text-align: center; border-collapse: collapse;">
