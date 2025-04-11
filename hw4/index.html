@@ -232,8 +232,47 @@
 			</table>
 		</div>
 		<p> 
-			When varying density and ks, we observed that the self-collision
+			When varying ks (N\m), we observed that the cloth collides more and contains more wrinkles. The 1,000 N/m cloth has the most folds and is the stretchiest, while the 5,000 N/m cloth is the most stable while the 15,000 N/m cloth is the stiffest.
 		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="1000ksselfcollision.png" width="400px"/>
+					<figcaption>1,000 N/m Self-Collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="postselfcollision.png" width="400px"/>
+					<figcaption>5,000 N/m Self-Collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="15000ksselfcollisionn.png" width="400px"/>
+					<figcaption>15,000 N/m Self-Collision</figcaption>
+				</td>
+			</tr>
+			</table>
+		</div>
+		<p>
+			When varying the density (g/cm^2), we observed that the cloth with 1 g/cm^2 has the least folds. The 15 g/cm^2 cloth  has less folds and the 100 g/cm^2 cloth is the heaviest and has the most amount of folds.
+		</p>
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			<tr>
+				<td style="text-align: center;">
+					<img src="1densityselfcollision.png" width="400px"/>
+					<figcaption>1 g/cm^2 Self-Collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="15 density self collision.png" width="400px"/>
+					<figcaption>15 g/cm^2 Self-Collision</figcaption>
+				</td>
+				<td style="text-align: center;">
+					<img src="100 density self-collision.png" width="400px"/>
+					<figcaption>100 g/cm^2 Self-Collision</figcaption>
+				</td>
+			</tr>
+			</table>
+		</div>
 
 		<h2>Part 5: Shaders</h2>
 		In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are frequently written in GLSL and are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
