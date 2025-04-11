@@ -180,6 +180,8 @@
 					<img src="5000 ks sphere.png" width="400px"/>
 					<figcaption>5000 N/m Sphere</figcaption>
 				</td>
+			</tr>
+			<tr>
 				<td style="text-align: center;">
 					<img src="50000 ks sphere.png" width="400px"/>
 					<figcaption>50,000 N/m Sphere</figcaption>
@@ -200,7 +202,7 @@
 		</figure>
 
 		<h2>Part 4: Handling self-collisions</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		To implement self-collision, we iterated through each point mass (candidates) and calculated its distance from the parameter point mass. If the distance was less the 2*thickness and the candidate point mass was not the same as the point mass passed in, we would determine its correction vector by multiplying the direction by the distance - 2*thickness. The correction for each point is then averaged and scaled by the simulation step before it is added to the point mass's position.
 
 		<h2>Part 5: Shaders</h2>
 		In the graphics pipeline, a shader is a program that works in parallel to compute visual properties like color and lighting effects. Apart from raytracing, shaders are frequently written in GLSL and are used to translate input data into a final 4D vector (RGBA) color output for each position, simulating various textures and materials on 3D objects.
@@ -213,31 +215,6 @@
 		Specular: Depending on the viewing angle, specular shading creates the illusion of glittering highlights. Blinn-Phong uses the angle between the surface normal and the bisector between the light direction and the view direction. The p value controls the sharpness of the specular highlight and controls the rate at which the highlight deviates from the point of maximum reflection. A narrower and glossier highlight is the result of a higher p value.
 		To determine the final shaded color of each point on the surface, the three components are first calculated independently and then merged.
 
-		<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			<tr>
-				<td style="text-align: center;">
-					<img src="500 ks sphere.png" width="400px"/>
-					<!-- REPLACE IMAGE -->
-					<figcaption>Texture mapping shader using custom texture</figcaption>
-				</td>
-				<td style="text-align: center;">
-					<img src="5000 ks sphere.png" width="400px"/>
-					<!-- REPLACE IMAGE -->
-					<figcaption>Mirror shader on cloth and sphere</figcaption>
-				</td>
-			</tr>
-			<tr>
-				<td style="text-align: center;">
-					<img src="5000 ks sphere.png" width="400px"/>
-					<!-- REPLACE IMAGE -->
-					<figcaption>Bump mapping on cloth and sphere</figcaption>
-				</td>
-				<td style="text-align: center;">
-					<img src="50000 ks sphere.png" width="400px"/>
-					<figcaption>Displacement mapping on sphere</figcaption>
-				</td>
-			</tr>
-		</table>
 		<!-- ADD COMME NTS ON BUMP VS DISPLACEMENT MAPPING -->
 		</div>
 	</body>
